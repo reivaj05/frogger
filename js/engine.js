@@ -23,11 +23,13 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        row_size = 83,
-        col_size = 101,
+        rowSize = 83,
+        colSize = 101,
         numRows,
         numCols,
         lastTime;
+
+    init_canvas();
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -65,7 +67,6 @@ var Engine = (function(global) {
      */
     function init() {
         reset();
-        init_canvas();
         lastTime = Date.now();
         main();
     }
@@ -73,8 +74,8 @@ var Engine = (function(global) {
     function init_canvas(){
         canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        numRows = Math.floor(canvas.height/row_size);
-        numCols = Math.floor(canvas.width/col_size);
+        numRows = Math.floor(canvas.height/rowSize);
+        numCols = Math.floor(canvas.width/colSize);
         doc.body.appendChild(canvas);
     }
 
@@ -127,8 +128,6 @@ var Engine = (function(global) {
                 'images/stone-block.png'    // Row 2 of 2 of grass
             ],
             row, col;
-            console.log(numRows);
-            console.log(numCols);
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -143,7 +142,7 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * col_size, row * row_size);
+                ctx.drawImage(Resources.get(rowImages[row]), col * colSize, row * rowSize);
             }
         }
 
@@ -192,4 +191,8 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
     global.ctx = ctx;
+    global.rowSize = rowSize;
+    global.colSize = colSize;
+    global.numRows = numRows;
+    global.numCols = numCols;
 })(this);
