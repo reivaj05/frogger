@@ -27,7 +27,7 @@ Enemy.prototype.render = function() {
 var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = this.initial_x = Math.floor(numCols/2) * colSize;
-    this.y = this.initial_y = (numRows -1) * rowSize - (rowSize/2);
+    this.y = this.initial_y = (numRows -1) * rowSize - Math.floor(rowSize/2);
 };
 
 // Update the player's position
@@ -48,18 +48,24 @@ Player.prototype.handleInput = function(keyPressed) {
         switch(keyPressed){
             case 'up':
                 this.y-= rowSize;
+                if(this.y < 0)
+                    this.y = - Math.floor(rowSize/2);
                 break;
             case 'down':
                 this.y+= rowSize;
+                if(this.y > (numRows -1) * rowSize)
+                    this.y =  this.initial_y;
                 break;
             case 'left':
                 this.x-= colSize;
+                if(this.x < 0)
+                    this.x = 0;
                 break;
             case 'right':
                 this.x+= colSize;
+                if(this.x > (numCols -1) * colSize)
+                    this.x = (numCols -1) * colSize;
                 break;
-            
-
         }
     }
 };
