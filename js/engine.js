@@ -35,6 +35,9 @@ var Engine = (function(global) {
      * and handles properly calling the update and render methods.
      */
     function main() {
+
+        // Clear the screen
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
          * instructions at different speeds we need a constant value that
