@@ -7,8 +7,8 @@ var Enemy = function(initialX, initialY, speed) {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.speed = speed;
-    this.x = initialX;
-    this.y = initialY;
+    this.x = this.initialX = initialX;
+    this.y = this.initialY = initialY;
 };
 
 // Update the enemy's position, required method for game
@@ -27,11 +27,17 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Enemy.prototype.reset = function(){
+    this.x = this.initialX;
+    this.y = this.initialY;
+};
+
 // Game player
 var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = this.initialX = Math.floor(numCols/2) * colSize;
     this.y = this.initialY = (numRows -1) * rowSize - Math.floor(rowSize/2);
+    this.hasWon = false;
 };
 
 // Update the player's position
@@ -47,13 +53,21 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Player.prototype.reset = function(){
+    this.x = this.initialX;
+    this.y = this.initialY;
+    this.hasWon = false;
+};
+
 Player.prototype.handleInput = function(keyPressed) {
     if(keyPressed){
         switch(keyPressed){
             case 'up':
                 this.y-= rowSize;
-                if(this.y < 0)
+                if(this.y < 0){
                     this.y = - Math.floor(rowSize/2);
+                    this.hasWon = true;
+                }
                 break;
             case 'down':
                 this.y+= rowSize;
