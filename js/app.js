@@ -1,13 +1,14 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(initialX, initialY, speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = 205;
-    this.y = 5;
+    this.speed = speed;
+    this.x = initialX;
+    this.y = initialY;
 };
 
 // Update the enemy's position, required method for game
@@ -16,6 +17,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x+=100*dt*this.speed;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -26,8 +28,8 @@ Enemy.prototype.render = function() {
 // Game player
 var Player = function() {
     this.sprite = 'images/char-boy.png';
-    this.x = this.initial_x = Math.floor(numCols/2) * colSize;
-    this.y = this.initial_y = (numRows -1) * rowSize - Math.floor(rowSize/2);
+    this.x = this.initialX = Math.floor(numCols/2) * colSize;
+    this.y = this.initialY = (numRows -1) * rowSize - Math.floor(rowSize/2);
 };
 
 // Update the player's position
@@ -54,7 +56,7 @@ Player.prototype.handleInput = function(keyPressed) {
             case 'down':
                 this.y+= rowSize;
                 if(this.y > (numRows -1) * rowSize)
-                    this.y =  this.initial_y;
+                    this.y =  this.initialY;
                 break;
             case 'left':
                 this.x-= colSize;
@@ -74,7 +76,10 @@ Player.prototype.handleInput = function(keyPressed) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-var allEnemies = [new Enemy(), new Enemy()];
+
+var allEnemies = [];
+for (var i=0; i< numRows-2; i++)
+    allEnemies.push(new Enemy(-100, i*rowSize+rowSize/2, 5));
 var player = new Player();
 
 
