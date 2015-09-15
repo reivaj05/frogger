@@ -52,7 +52,7 @@ var Engine = (function(global) {
          */
         update(dt);
         render();
-        if(player.hasWon)
+        if(player.hasWon || player.hasLost)
             reset();
 
         /* Set our lastTime variable which is used to determine the time delta

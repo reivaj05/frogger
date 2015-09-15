@@ -38,6 +38,7 @@ var Player = function() {
     this.x = this.initialX = Math.floor(numCols/2) * colSize;
     this.y = this.initialY = (numRows -1) * rowSize - Math.floor(rowSize/2);
     this.hasWon = false;
+    this.hasLost = false;
 };
 
 // Update the player's position
@@ -46,6 +47,7 @@ Player.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.checkCollisions();
 };
 
 // Draw the player on the screen
@@ -53,13 +55,42 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Player.prototype.checkCollisions = function(){
+    var playerPosition = {radius: 20, x: this.x, y: this.y},
+        payer = this;
+
+    allEnemies.forEach(function(enemy){
+        var enemyPosition = {radius: 12, x: enemy.x, y: enemy.y};
+
+        var dx = playerPosition.x - enemyPosition.x;
+        var dy = playerPosition.y - enemyPosition.y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < playerPosition.radius + enemyPosition.radius) {
+            player.hasLost = true;    
+            return;
+        }
+
+        // var currentRowEnemy = Math.floor(enemy.y/rowSize),
+        //     currentColEnemy = Math.floor(enemy.x/colSize);
+        //     if(currentRowPlayer==currentRowEnemy && currentColPlayer==currentColEnemy){
+        //         this.hasLost = true;
+        //         alert('crp='+currentRowPlayer);
+        //         alert('ccp='+currentColPlayer);
+        //         return;
+        //     }
+
+    });
+};
+
 Player.prototype.reset = function(){
     this.x = this.initialX;
     this.y = this.initialY;
-    this.hasWon = false;
+    this.hasWon = this.hasLost = false;
 };
 
 Player.prototype.handleInput = function(keyPressed) {
+
     if(keyPressed){
         switch(keyPressed){
             case 'up':
