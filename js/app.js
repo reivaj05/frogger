@@ -57,30 +57,33 @@ Player.prototype.render = function() {
 
 Player.prototype.checkCollisions = function(){
     var playerPosition = {radius: 20, x: this.x, y: this.y},
-        payer = this;
+        payer = this,
+        objectRadius = 10;
+        calculateDistance = function(objectPosition){
+            var dx = playerPosition.x - objectPosition.x,
+                dy = playerPosition.y - objectPosition.y,
+                distance = Math.sqrt(dx * dx + dy * dy);
+            return distance;
+        };
 
     allEnemies.forEach(function(enemy){
-        var enemyPosition = {radius: 12, x: enemy.x, y: enemy.y};
-
-        var dx = playerPosition.x - enemyPosition.x;
-        var dy = playerPosition.y - enemyPosition.y;
-        var distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < playerPosition.radius + enemyPosition.radius) {
-            player.hasLost = true;    
+        var distance = calculateDistance({radius: objectRadius, x: enemy.x, y: enemy.y});
+        if (distance < playerPosition.radius + objectRadius) {
+            player.hasLost = true;
             return;
         }
-
-        // var currentRowEnemy = Math.floor(enemy.y/rowSize),
-        //     currentColEnemy = Math.floor(enemy.x/colSize);
-        //     if(currentRowPlayer==currentRowEnemy && currentColPlayer==currentColEnemy){
-        //         this.hasLost = true;
-        //         alert('crp='+currentRowPlayer);
-        //         alert('ccp='+currentColPlayer);
-        //         return;
-        //     }
-
     });
+
+    for(var i=0; i<gems.length; i++){
+
+        var gem = gems[i],
+            distance = calculateDistance({radius: objectRadius, x: gem.x, y: gem.y});
+        if (distance < playerPosition.radius + objectRadius) {
+            score+= 10;
+            gems.splice(i,1);
+            break;
+        }
+    }
 };
 
 Player.prototype.reset = function(){
@@ -119,14 +122,29 @@ Player.prototype.handleInput = function(keyPressed) {
     }
 };
 
+var Gem = function(x, y, type){
+    this.x = x;
+    this.y = y;
+    this.type = type;
+    this.sprite = 'images/blue-gem.png';
+};
+
+// Draw the gem on the screen
+Gem.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-
+var score = 0;
+var gems = [];
 var allEnemies = [];
 for (var i=0; i< numRows-2; i++)
     allEnemies.push(new Enemy(-100, i*rowSize+rowSize/2, 5));
+for (var i=0; i<numRows-1; i++)
+    gems.push(new Gem(300, i*rowSize+rowSize/2, null));
 var player = new Player();
 
 
