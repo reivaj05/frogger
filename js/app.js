@@ -134,6 +134,10 @@ Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
@@ -141,10 +145,13 @@ Gem.prototype.render = function() {
 var score = 0;
 var gems = [];
 var allEnemies = [];
-for (var i=0; i< numRows-2; i++)
-    allEnemies.push(new Enemy(-100, i*rowSize+rowSize/2, 5));
-for (var i=0; i<numRows-1; i++)
-    gems.push(new Gem(300, i*rowSize+rowSize/2, null));
+for (var i=0; i< numRows-2; i++){
+    allEnemies.push(new Enemy(getRandomArbitrary(-1000, -10), i*rowSize+rowSize/2, 5));
+    allEnemies.push(new Enemy(getRandomArbitrary(-3000, -1000), i*rowSize+rowSize/2, 5));
+    allEnemies.push(new Enemy(getRandomArbitrary(-5000, -3000), i*rowSize+rowSize/2, 5));
+}
+// for (var i=0; i<numRows-1; i++)
+    // gems.push(new Gem(300, i*rowSize+rowSize/2, null));
 var player = new Player();
 
 
